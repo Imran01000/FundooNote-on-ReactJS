@@ -1,0 +1,75 @@
+.main-reg{
+
+}
+
+.form-reg{
+    width: 600px;
+    margin-left: 370px;
+    margin-top: 70px;
+    height: 450px;
+}
+
+.form-head-reg{
+    background-color: bisque !important;
+    text-align: center;
+}
+.text-reg{
+    text-align: center;
+    margin-top: 10px;
+}
+
+.text-field-reg{
+    margin-top: 40px;
+    margin-left: 80px;
+}
+
+#email-field-reg{
+    margin-top: 20px;
+    
+}
+.email{
+    width: 440px;
+
+}
+
+.last-name{
+    margin-left: 20px !important;
+}
+
+.mobile-no{
+    width: 440px;
+}
+.confirm{
+    margin-left: 20px !important;
+}
+#password-field-reg{
+    margin-top: 20px;
+}
+
+#mobileNo-field-reg{
+    margin-top: 20px;
+}
+.buttons-reg{
+    margin-top: 20px;
+    margin-left: 40px;
+}
+
+.buttons-reg Button{
+    margin-left: 190px;
+    background-color: bisque;
+
+}
+.fundoo-reg{
+    margin: 20px;
+}
+
+#link{
+    margin-left: 35px;
+}
+@media only screen and (min-witdh:1200px)
+{
+    #name-field-reg{
+        display: none;
+    }
+   
+}
