@@ -7,9 +7,90 @@ import { Link } from 'react-router-dom'
 import './registration.scss'
 
 export class registration extends Component {
+
+    constructor(props) {
+        super(props)
+    
+        this.state = {
+            fname:"",
+            lname:"",
+            email:"",
+            pwd:"",
+            mobileNo:"",
+            emailError:"",
+            emailErrorTest:"",
+            pwdError:"",
+            pwdErrorTest:"",
+            mobileNoError:"",
+            mobileNoErrorTest:"",
+        }
+    }
+    
+    validateForEmail = e =>{
+        const regexForEmail = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const inputData = e.target.value;
+        if (regexForEmail.test(inputData)) {
+            this.setState({ 
+                emailError: false, emailErrorText: "" 
+            });
+            console.log(inputData);
+        } else {
+            this.setState({
+                [e.target.name]: "",
+                emailError: true,
+                emailErrorText: "Invalid Email Id"
+            },
+            ()=>{
+                console.log(this.state.emailErrorText);
+            }
+            );
+        }
+    }
+    validateForPwd = e =>{
+        const regexForPwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const inputData = e.target.value;
+        if(regexForPwd.test(inputData)){
+           this.setState({
+            pwdError: false, pwdErrorText: "" 
+           })
+           console.log(inputData);
+        }else{
+            this.setState({
+                [e.target.name]: "",
+                pwdError: true,
+                pwdErrorText: "Minimum eight characters required"
+            },
+            ()=>{
+                console.log(this.state.pwdErrorText);
+            }
+            );
+        }
+    }
+    validateForMobileNo = e =>{
+        const regexForMobileNo = /^[789]\d{9}$/;
+        const inputData = e.target.value;
+        if(regexForMobileNo.test(inputData))
+        {
+            this.setState({
+                mobileNoError: false, mobileNoErrorText: "" 
+               })
+               console.log(inputData);
+        }else{
+            this.setState({
+                [e.target.name]: "",
+                mobileNoError: true,
+                mobileNoErrorText: "Number must start with 7,8,9 and must be of 10 digit "
+            },
+            ()=>{
+                console.log(this.state.mobileNoErrorText);
+            }
+            ); 
+        }
+    }
     render() {
         return (
             <Container className="main-reg">
+                <form onSubmit="">
                  <Card className="form-reg">
                     <Card className="form-head-reg">
                         <h3 className="fundoo-reg">Fundoo note</h3>
@@ -22,40 +103,58 @@ export class registration extends Component {
                     <div id="name-field-reg">
                             <TextField  
                                 label="First name"
+                                type="text"
                                 size="small"
                                 variant="outlined" />
                             <TextField  
                                 className="last-name"
+                                type="text"
                                 label="Last name"
                                 size="small"
                                 variant="outlined" />
                         </div>
                         <div id="email-field-reg">
                             <TextField
-                                className="email"  
+                                className="email"
+                                type="text"  
                                 label="Email"
                                 size="small"
-                                variant="outlined" /><br/>
+                                variant="outlined" 
+                                onBlur={this.validateForEmail}
+                                error={this.state.pwdError.length > 0}
+                                helperText={this.state.emailErrorText}/>
                         </div>
                         <div id="password-field-reg">
                             <TextField 
                                 required 
                                 label="Password"
+                                type="password"
                                 size="small"
-                                variant="outlined" />
+                                variant="outlined" 
+                                onBlur={this.validateForPwd}
+                                error={this.state.pwdError.length > 0}
+                                helperText={this.state.pwdErrorText}/>
                                 <TextField 
                                 required 
                                 label="Confirm"
+                                type="password"
                                 className="confirm"
                                 size="small"
-                                variant="outlined" />
+                                variant="outlined" 
+                                onBlur={this.validateForPwd}
+                                error={this.state.pwdError.length > 0}
+                                helperText={this.state.pwdErrorText}/>
                         </div>
                         <div id="mobileNo-field-reg">
                             <TextField 
                                 label="mobile-no"
+                                type="number"
                                 className="mobile-no"
                                 size="small"
-                                variant="outlined" />
+                                variant="outlined" 
+                                onBlur={this.validateForMobileNo}
+                                error={this.state.pwdError.length > 0}
+                                helperText={this.state.mobileNoErrorText}/>
                         </div>
                     </div>
                     <div className="buttons-reg">
@@ -63,6 +162,7 @@ export class registration extends Component {
                         <Button variant="contained">Create</Button>
                     </div>
                 </Card>
+                </form>
             </Container>
         )
     }
