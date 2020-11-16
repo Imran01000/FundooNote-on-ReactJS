@@ -23,22 +23,32 @@ export class registration extends Component {
             pwdErrorTest:"",
             mobileNoError:"",
             mobileNoErrorTest:"",
+            emailValidateColor:"",
+            pwdValidateColor:"",
+            mobileNoValidateColor:""
         }
     }
     
     validateForEmail = e =>{
-        const regexForEmail = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const regexForEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         const inputData = e.target.value;
         if (regexForEmail.test(inputData)) {
             this.setState({ 
-                emailError: false, emailErrorText: "" 
+                emailError: false, emailErrorText: "",emailValidateColor:""
             });
             console.log(inputData);
-        } else {
+        } 
+        else if(inputData === ""){
+            this.setState({ 
+                emailError: false, emailErrorText: "",emailValidateColor:""
+            });
+        }
+        else {
             this.setState({
                 [e.target.name]: "",
                 emailError: true,
-                emailErrorText: "Invalid Email Id"
+                emailErrorText: "Invalid Email Id",
+                emailValidateColor:"secondary"
             },
             ()=>{
                 console.log(this.state.emailErrorText);
@@ -51,14 +61,21 @@ export class registration extends Component {
         const inputData = e.target.value;
         if(regexForPwd.test(inputData)){
            this.setState({
-            pwdError: false, pwdErrorText: "" 
+            pwdError: false, pwdErrorText: "", pwdValidateColor:""
            })
            console.log(inputData);
-        }else{
+        }
+        else if(inputData === ""){
+            this.setState({
+                pwdError: false, pwdErrorText: "", pwdValidateColor:""
+               })
+        }
+        else{
             this.setState({
                 [e.target.name]: "",
                 pwdError: true,
-                pwdErrorText: "Minimum eight characters required"
+                pwdErrorText: "Minimum eight characters required",
+                pwdValidateColor:"secondary"
             },
             ()=>{
                 console.log(this.state.pwdErrorText);
@@ -72,14 +89,21 @@ export class registration extends Component {
         if(regexForMobileNo.test(inputData))
         {
             this.setState({
-                mobileNoError: false, mobileNoErrorText: "" 
+                mobileNoError: false, mobileNoErrorText: "", mobileNoValidateColor:"" 
                })
                console.log(inputData);
-        }else{
+        }
+        else if(inputData === ""){
+            this.setState({
+                mobileNoError: false, mobileNoErrorText: "", mobileNoValidateColor:"" 
+               })
+        }
+        else{
             this.setState({
                 [e.target.name]: "",
                 mobileNoError: true,
-                mobileNoErrorText: "Number must start with 7,8,9 and must be of 10 digit "
+                mobileNoErrorText: "Number must start with 7,8,9 and must be of 10 digit ",
+                mobileNoValidateColor:"secondary"
             },
             ()=>{
                 console.log(this.state.mobileNoErrorText);
@@ -122,7 +146,8 @@ export class registration extends Component {
                                 variant="outlined" 
                                 onBlur={this.validateForEmail}
                                 error={this.state.pwdError.length > 0}
-                                helperText={this.state.emailErrorText}/>
+                                helperText={this.state.emailErrorText}
+                                color={this.state.emailValidateColor}/>
                         </div>
                         <div id="password-field-reg">
                             <TextField 
@@ -133,7 +158,8 @@ export class registration extends Component {
                                 variant="outlined" 
                                 onBlur={this.validateForPwd}
                                 error={this.state.pwdError.length > 0}
-                                helperText={this.state.pwdErrorText}/>
+                                helperText={this.state.pwdErrorText}
+                                color={this.state.pwdValidateColor}/>
                                 <TextField 
                                 required 
                                 label="Confirm"
@@ -154,7 +180,8 @@ export class registration extends Component {
                                 variant="outlined" 
                                 onBlur={this.validateForMobileNo}
                                 error={this.state.pwdError.length > 0}
-                                helperText={this.state.mobileNoErrorText}/>
+                                helperText={this.state.mobileNoErrorText}
+                                color={this.state.mobileNoValidateColor}/>
                         </div>
                     </div>
                     <div className="buttons-reg">
