@@ -13,7 +13,8 @@ export class reset_password extends Component {
         this.state = {
              pwd:"",
              pwdError:"",
-             pwdErrorText:""
+             pwdErrorText:"",
+             color:""
         }
     }
     
@@ -23,14 +24,21 @@ export class reset_password extends Component {
         const inputData = e.target.value;
         if(regexForPwd.test(inputData)){
            this.setState({
-            pwdError: false, pwdErrorText: "" 
+            pwdError: false, pwdErrorText: "", color:""
            })
            console.log(inputData);
-        }else{
+        }
+        else if(inputData === ""){
+            this.setState({
+                pwdError: false, pwdErrorText: "", color:"" 
+               })
+        }
+        else{
             this.setState({
                 [e.target.name]: "",
                 pwdError: true,
-                pwdErrorText: "Minimum 6 characters required"
+                pwdErrorText: "Minimum 6 characters required",
+                color:"secondary"
             },
             ()=>{
                 console.log(this.state.pwdErrorText);
@@ -60,7 +68,8 @@ export class reset_password extends Component {
                                 variant="outlined" 
                                 onBlur={this.validateForPassword}
                                 error={this.state.pwdError.length > 0}
-                                helperText={this.state.pwdErrorText}/>
+                                helperText={this.state.pwdErrorText}
+                                color={this.state.color}/>
                         </div>
                         <div id="confirm-field-reset">
                             <TextField  
@@ -70,7 +79,7 @@ export class reset_password extends Component {
                                 variant="outlined"
                                 onBlur={this.validateForPassword}
                                 error={this.state.pwdError.length > 0}
-                                helperText={this.state.pwdErrorText} />
+                                 />
                         </div>
                     </div>
                     <div className="buttons-reset">
