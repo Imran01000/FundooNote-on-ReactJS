@@ -14,23 +14,32 @@ class forget_password extends Component {
         this.state = {
              email:"",
              emailError:"",
-             emailErrorText:""
+             emailErrorText:"",
+             color:""
         }
     }
     
     validateForEmail = e =>{
-        const regexForEmail = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const regexForEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         const inputData = e.target.value;
         if (regexForEmail.test(inputData)) {
             this.setState({ 
-                emailError: false, emailErrorText: "" 
+                emailError: false, emailErrorText: "",color:""
             });
-            console.log(inputData);
-        } else {
-            this.setState({
+             console.log(inputData);
+        }
+        else if(inputData === "") {
+                    this.setState({ 
+                        emailError: false, emailErrorText: "",color:""
+                    }); 
+                    console.log("Empty");
+                } 
+        else {
+             this.setState({
                 [e.target.name]: "",
                 emailError: true,
-                emailErrorText: "Invalid Email Id"
+                emailErrorText: "Invalid Email Id",
+                color:"secondary"
             },
             ()=>{
                 console.log(this.state.emailErrorText);
@@ -59,7 +68,8 @@ class forget_password extends Component {
                                 variant="outlined" 
                                 onBlur={this.validateForEmail}
                                 error={this.state.emailError.length > 0}
-                                helperText={this.state.emailErrorText} /><br/>
+                                helperText={this.state.emailErrorText}
+                                color={this.state.color} />
                         </div>
                     </div>
                     <div className="buttons-forget">
