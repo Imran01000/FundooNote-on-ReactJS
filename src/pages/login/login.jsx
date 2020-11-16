@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { 
     Button, Icon, Card, TextField,
-    Container 
+    Container, InputAdornment
 } from "@material-ui/core"
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import IconButton from '@material-ui/core/IconButton';
 import { Link } from 'react-router-dom'
 import './login.scss'
 
@@ -18,6 +21,8 @@ export class login extends Component {
              emailError:"",
              pwdErrorText:"",
              pwdError:"",
+             emailValidatecolor:"",
+             pwdValidatecolor:""
         }
     }
     
@@ -27,14 +32,21 @@ export class login extends Component {
         const inputData = e.target.value;
         if (regexForEmail.test(inputData)) {
             this.setState({ 
-                emailError: false, emailErrorText: "" 
+                emailError: false, emailErrorText: "" ,emailValidatecolor:''
             });
             console.log(inputData);
-        } else {
+        } 
+        else if(inputData === ""){
+            this.setState({ 
+                emailError: false, emailErrorText: "" ,emailValidatecolor:''
+            });
+        }
+        else {
             this.setState({
                 [e.target.name]: "",
                 emailError: true,
-                emailErrorText: "Invalid Email Id"
+                emailErrorText: "Invalid Email Id",
+                color:"secondary"
             },
             ()=>{
                 console.log(this.state.emailErrorText);
@@ -48,14 +60,22 @@ export class login extends Component {
         const inputData = e.target.value;
         if(regexForPwd.test(inputData)){
            this.setState({
-            pwdError: false, pwdErrorText: "" 
+            pwdError: false, pwdErrorText: "", pwdValidatecolor:""
            })
            console.log(inputData);
-        }else{
+        }
+        else if(inputData === ""){
+            this.setState({
+                pwdError: false, pwdErrorText: "", pwdValidatecolor:""
+               }) 
+        }
+        else{
             this.setState({
                 [e.target.name]: "",
                 pwdError: true,
+                pwdValidatecolor:"secondary",
                 pwdErrorText: "Minimum 6 characters required"
+                
             },
             ()=>{
                 console.log(this.state.pwdErrorText);
@@ -88,7 +108,8 @@ export class login extends Component {
                                 variant="outlined"
                                 onBlur={this.validateForEmail}
                                 error={this.state.emailError.length > 0}
-                                helperText={this.state.emailErrorText} />
+                                helperText={this.state.emailErrorText}
+                                color={this.state.emailValidatecolor} />
 
                         </div>
                         
@@ -96,13 +117,28 @@ export class login extends Component {
                             <TextField
                                 required
                                 label="Password"
-                                type="password"
                                 name="password"
                                 size="small"
                                 variant="outlined"
+                                // type={this.values.showPassword ? 'text' : 'password'}
+                                // value={this.values.password}
                                 onBlur={this.validateForPassword}
                                 error={this.state.pwdError.length > 0}
-                                helperText={this.state.pwdErrorText} />  
+                                helperText={this.state.pwdErrorText}
+                                color={this.state.pwdValidatecolor}
+                                
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                      <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={this.handleClickShowPassword}
+                                        onMouseDown={this.handleMouseDownPassword}
+                                        edge="end"
+                                      >
+                                        {/* {this.values.showPassword ? <Visibility /> : <VisibilityOff />} */}
+                                      </IconButton>
+                                    </InputAdornment>
+                                  } />  
                                 <br/>
                                 <Link to="/forgetPassword">Forget password?</Link>
                         </div>
