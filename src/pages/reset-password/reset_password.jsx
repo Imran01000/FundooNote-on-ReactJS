@@ -51,30 +51,29 @@ export class reset_password extends Component {
         return (
             <Container className="main-reset">
             <form onSubmit="">
-                <Card className="form-reset">
-                    <Card className="form-head-reset">
-                        <h3 className="fundoo-reset">Fundoo note</h3>
-                    </Card>
+                    <h1 className="fundoo-reset">Fundoo note</h1>
+                
                     <div className="text-reset">
                         <b>Set new password!!</b><br/> 
                         <span>be happy</span>
                     </div>
                     <div className="text-field-reset">
-                        <div id="newpassword-field-reset">
                             <TextField  
                                 label="New password"
                                 type="password"
+                                className="new-password"
                                 size="small"
                                 variant="outlined" 
                                 onBlur={this.validateForPassword}
                                 error={this.state.pwdError.length > 0}
                                 helperText={this.state.pwdErrorText}
                                 color={this.state.color}/>
-                        </div>
+
                         <div id="confirm-field-reset">
                             <TextField  
                                 label="Confirm password"
                                 type="password"
+                                className="confirm-password"
                                 size="small"
                                 variant="outlined"
                                 onBlur={this.validateForPassword}
@@ -86,7 +85,6 @@ export class reset_password extends Component {
                         <Link to="/registration">Create account</Link>
                         <Button variant="contained">Confirm</Button>
                     </div>
-                </Card>
             </form>
         </Container>
         )
