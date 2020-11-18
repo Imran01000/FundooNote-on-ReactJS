@@ -51,32 +51,30 @@ class forget_password extends Component {
         return (
             <Container className="main-forget">
             <form onSubmit="">
-                <Card className="form-forget">
-                    <Card className="form-head-forget">
-                        <h3 className="fundoo-forget">Fundoo note</h3>
-                    </Card>
+
+                    <h1 className="fundoo-forget">Fundoo note</h1>
+                    
                     <div className="text-forget">
                         <b>Forgot password</b><br/> 
                         <span>don't be worry much</span>
                     </div>
                     <div className="text-field-forget">
-                        <div id="email-field-forget">
                             <TextField  
                                 label="Enter your email"
                                 type="text"
+                                className="email-field"
                                 size="small"
                                 variant="outlined" 
                                 onBlur={this.validateForEmail}
                                 error={this.state.emailError.length > 0}
                                 helperText={this.state.emailErrorText}
                                 color={this.state.color} />
-                        </div>
                     </div>
                     <div className="buttons-forget">
-                        <Link to="/registration">Create account</Link>
+                        <Link to="/registration" id="link">Create account</Link>
                         <Button variant="contained" onClick={()=> window.location.href="/resetPassword"}>Next</Button>
                     </div>
-                </Card>
+                
             </form>
         </Container>
         )
