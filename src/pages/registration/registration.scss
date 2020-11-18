@@ -1,17 +1,10 @@
 .main-reg{
-
-}
-
-.form-reg{
-    width: 600px;
-    margin-left: 370px;
-    margin-top: 70px;
-    height: 450px;
-}
-
-.form-head-reg{
-    background-color: bisque !important;
     text-align: center;
+    margin-top: 100px;
+}
+
+.fundoo-reg{
+    color: bisque;
 }
 .text-reg{
     text-align: center;
@@ -20,7 +13,6 @@
 
 .text-field-reg{
     margin-top: 40px;
-    margin-left: 80px;
 }
 
 #email-field-reg{
@@ -29,7 +21,6 @@
 }
 .email{
     width: 440px;
-
 }
 
 .last-name{
@@ -51,25 +42,48 @@
 }
 .buttons-reg{
     margin-top: 20px;
-    margin-left: 40px;
 }
 
 .buttons-reg Button{
-    margin-left: 190px;
+    margin-left: 90px;
     background-color: bisque;
 
 }
-.fundoo-reg{
-    margin: 20px;
-}
+
 
 #link{
     margin-left: 35px;
 }
-@media only screen and (min-witdh:1200px)
-{
-    #name-field-reg{
-        display: none;
+@media (max-width:470px){
+    .last-name{
+        margin-left: 8px !important;
+        width: 100px;
     }
-   
+    .email{
+        width: 208px;
+    
+    }
+    .mobile-no{
+        width: 208px;
+    }
+    .confirm{
+        margin-left: 8px !important;
+        width: 100px;
+    }
+    .first-name{
+        width: 100px;
+    }
+    .pwd{
+       width: 100px; 
+    }
+    #link{
+        text-size-adjust: 10px;
+    }
+    .buttons-reg Button{
+        margin-left: 15px;
+    }
+
+    .fundoo-reg{
+        font-size: larger;
+    }
 }
