@@ -115,10 +115,8 @@ export class registration extends Component {
         return (
             <Container className="main-reg">
                 <form onSubmit="">
-                 <Card className="form-reg">
-                    <Card className="form-head-reg">
-                        <h3 className="fundoo-reg">Fundoo note</h3>
-                    </Card>
+                    <h1 className="fundoo-reg">Fundoo note</h1>
+                 
                     <div className="text-reg">
                         <b>Do  registration</b><br/> 
                         <span>with fundoo note!!</span>
@@ -128,6 +126,7 @@ export class registration extends Component {
                             <TextField  
                                 label="First name"
                                 type="text"
+                                className="first-name"
                                 size="small"
                                 variant="outlined" />
                             <TextField  
@@ -154,6 +153,7 @@ export class registration extends Component {
                                 required 
                                 label="Password"
                                 type="password"
+                                className="pwd"
                                 size="small"
                                 variant="outlined" 
                                 onBlur={this.validateForPwd}
@@ -183,12 +183,11 @@ export class registration extends Component {
                                 helperText={this.state.mobileNoErrorText}
                                 color={this.state.mobileNoValidateColor}/>
                         </div>
+                        <div className="buttons-reg">
+                            <Link to="/" id="link">Already have an account?</Link>
+                            <Button variant="contained">Create</Button>
+                        </div>
                     </div>
-                    <div className="buttons-reg">
-                        <Link to="/" id="link">Already have an account?</Link>
-                        <Button variant="contained">Create</Button>
-                    </div>
-                </Card>
                 </form>
             </Container>
         )
