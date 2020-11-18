@@ -1,34 +1,30 @@
-.main-login{
-
-}
-
+.form-body{
+     text-align: center;
+     margin-top: 150px;
+ }
 .form-login{
-    width: 300px;
-    margin-left: 495px;
-    margin-top: 150px;
+    width: 400px;
     height: 370px;
 }
 
 .form-head{
-    
     background-color: bisque !important;
 }
+
 .text{
-   text-align: center;
    margin-top: 10px;
 }
+
 .text-field-login{
-    margin-top: 25px;
-    margin-left: 40px;
+    margin-top: 20px;
 }
 
-#password-field{
+.password-field{
     margin-top: 20px;
 }
 
 .buttons-login{
     margin-top: 20px;
-    margin-left: 40px;
 }
 
 .buttons-login Button{
@@ -37,6 +33,35 @@
 }
 
 .fundoo-text{
-    text-align: center;
+    color: bisque;
 }
 
+.password-input{
+    width: 320px;
+}
+
+.email-input{
+    width: 320px;
+}
+
+@media (max-width:350px){
+    .password-input{
+        width: 200px;
+    }
+    
+    .email-input{
+        width: 200px;
+    }
+
+    .fundoo-text{
+        font-size: larger;
+    }
+
+    .text span,b{
+        font-size: medium;
+    }
+
+    .buttons-login Button{
+        margin-left: 15px;
+    }
+}
