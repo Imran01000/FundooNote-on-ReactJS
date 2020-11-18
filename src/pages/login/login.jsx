@@ -46,7 +46,7 @@ export class login extends Component {
                 [e.target.name]: "",
                 emailError: true,
                 emailErrorText: "Invalid Email Id",
-                color:"secondary"
+                emailValidatecolor:"secondary"
             },
             ()=>{
                 console.log(this.state.emailErrorText);
@@ -87,12 +87,11 @@ export class login extends Component {
     render() {
         
         return (
-            <Container className="main-login">
+            <div className="form-body">
                 <form onSubmit={this.handleChange}>
-                <Card className="form-login">
-                    <Card className="form-head">
-                        <h3 className="fundoo-text">Fundoo note</h3>
-                    </Card>
+                    <p className="header">
+                    <h1 className="fundoo-text">Fundoo note</h1>
+                    </p>
                     <div className="text">
                         <b>SignIn</b><br/> 
                         <span>with your fundoo note</span>
@@ -102,6 +101,7 @@ export class login extends Component {
                             <TextField 
 
                                 label="Email"
+                                className="email-input"
                                 type="text"
                                 name="email"
                                 size="small"
@@ -113,9 +113,10 @@ export class login extends Component {
 
                         </div>
                         
-                        <div id="password-field">
+                        <div className="password-field">
                             <TextField
                                 required
+                                className="password-input"
                                 label="Password"
                                 name="password"
                                 size="small"
@@ -140,16 +141,17 @@ export class login extends Component {
                                     </InputAdornment>
                                   } />  
                                 <br/>
-                                <Link to="/forgetPassword">Forget password?</Link>
+                                <Button className="forget-button" href="/forgetPassword" color="primary" size="small">
+                                     Forget password?
+                                </Button>
+                                <div className="buttons-login">    
+                                    <Link to="/registration">Create account</Link>
+                                    <Button type="submit" variant="contained">SignIn</Button>
+                                </div>
                         </div>
                     </div>
-                    <div className="buttons-login">
-                        <Link to="/registration">Create account</Link>
-                        <Button type="submit" variant="contained">SignIn</Button>
-                    </div>
-                </Card>
                 </form>
-            </Container>
+            </div>
         )
     }
 }
