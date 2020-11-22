@@ -1,0 +1,31 @@
+.search-bar{
+    margin-left: 60px;
+    background-color:  #f2f2f2;
+    width: 250%;
+    height: 40px;
+    border-radius: 10px;
+    padding-left: 20%;
+}
+.pesron-icon{
+    margin-left: 50%;
+}
+
+.Sidenav-Bar{
+    width: 250px;
+}
+
+
+@media(max-width:400px){
+    .search-bar{
+        width: 100px;
+    }
+    .pesron-icon{
+        margin-left: 5px;
+    }
+}
+
+@media(max-width:900px){
+    .fundoo-text span{
+        font-size: xx-small;
+    }
+}
