@@ -8,6 +8,9 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import { Link } from 'react-router-dom'
 import './login.scss'
+import {userlogin} from '../../services/user-service'
+import Snackbar from '@material-ui/core/Snackbar';
+
 
 export class login extends Component {
   
@@ -22,7 +25,10 @@ export class login extends Component {
              pwdErrorText:"",
              pwdError:"",
              emailValidatecolor:"",
-             pwdValidatecolor:""
+             pwdValidatecolor:"",
+             showPassword:false,
+             snackBarOpen:false,
+             snackBarMsg:""
         }
     }
     
@@ -30,6 +36,9 @@ export class login extends Component {
     validateForEmail = e => {
         const regexForEmail= /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         const inputData = e.target.value;
+        this.setState({
+            email:inputData
+        })
         if (regexForEmail.test(inputData)) {
             this.setState({ 
                 emailError: false, emailErrorText: "" ,emailValidatecolor:''
@@ -56,8 +65,11 @@ export class login extends Component {
     }
    
     validateForPassword = e => {
-        const regexForPwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/g;
+        const regexForPwd = /^[0-9]\d{1,}$/;
         const inputData = e.target.value;
+        this.setState({
+            password: inputData
+        })
         if(regexForPwd.test(inputData)){
            this.setState({
             pwdError: false, pwdErrorText: "", pwdValidatecolor:""
@@ -84,11 +96,52 @@ export class login extends Component {
         }
         
     }
+
+    handleClickShowPassword = () => {
+        this.setState({ showPassword:true  });
+      };
+
+    snackBarClose = (e)=>{
+        this.setState({snackBarOpen:false})
+    }
+    handleData = () =>{
+        console.log("hey handle data")
+        if(this.state.email !== undefined && this.state.password !== undefined){
+             let loginData = {
+                email: this.state.email,
+                password: this.state.password
+            }
+            console.log(loginData)
+
+             userlogin(loginData).then(
+                result =>{
+                    if(result.status === 200)
+                    {
+                        console.log("login successfully")
+                        this.props.history.push({pathname:"/dash-board"})                       
+                    }
+                    console.log(result)
+                  let data ={
+                        userId: result.data.userId,
+                        userToken: result.data.id,
+                    }
+                    localStorage.setItem("userdata", JSON.stringify(data));
+                }
+            ).catch(
+                () =>{
+                    console.log("Something went wrong");
+                }
+            );          
+            
+        }
+        if(this.state.email === "" && this.state.password === "")
+        {
+            this.setState({snackBarMsg:"feilds are empty", snackBarOpen:true})
+        }
+    }
     render() {
-        
         return (
             <div className="form-body">
-                <form onSubmit={this.handleChange}>
                     <p className="header">
                     <h1 className="fundoo-text">Fundoo note</h1>
                     </p>
@@ -99,7 +152,6 @@ export class login extends Component {
                     <div className="text-field-login">
                         <div id="email-field">
                             <TextField 
-
                                 label="Email"
                                 className="email-input"
                                 type="text"
@@ -121,8 +173,8 @@ export class login extends Component {
                                 name="password"
                                 size="small"
                                 variant="outlined"
-                                // type={this.values.showPassword ? 'text' : 'password'}
-                                // value={this.values.password}
+                                // type={this.state.showPassword ? 'text' : 'password'}
+                                // value={this.state.password}
                                 onBlur={this.validateForPassword}
                                 error={this.state.pwdError.length > 0}
                                 helperText={this.state.pwdErrorText}
@@ -131,26 +183,33 @@ export class login extends Component {
                                 endAdornment={
                                     <InputAdornment position="end">
                                       <IconButton
-                                        aria-label="toggle password visibility"
                                         onClick={this.handleClickShowPassword}
-                                        onMouseDown={this.handleMouseDownPassword}
                                         edge="end"
                                       >
-                                        {/* {this.values.showPassword ? <Visibility /> : <VisibilityOff />} */}
+                                        {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
                                       </IconButton>
                                     </InputAdornment>
-                                  } />  
+                                  }
+                                   />  
                                 <br/>
                                 <Button className="forget-button" href="/forgetPassword" color="primary" size="small">
                                      Forget password?
                                 </Button>
                                 <div className="buttons-login">    
                                     <Link to="/registration">Create account</Link>
-                                    <Button type="submit" variant="contained">SignIn</Button>
+                                    <Button type="submit" variant="contained" onClick={this.handleData}>
+                                        SignIn
+                                     </Button>
                                 </div>
                         </div>
                     </div>
-                </form>
+                    <Snackbar
+                        anchorOrigin={{vertical:"bottom", horizontal:"left"}}
+                        open={this.state.snackBarOpen}
+                        autoHideDuration={3000}
+                        onClose={this.snackBarClose}
+                        message={this.state.snackBarMsg}
+                    />
             </div>
         )
     }
