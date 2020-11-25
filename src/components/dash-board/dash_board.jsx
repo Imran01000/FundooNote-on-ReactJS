@@ -16,7 +16,11 @@ import EmojiObjectsOutlinedIcon from '@material-ui/icons/EmojiObjectsOutlined';
 import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import Sidenav from '../side-nave-bar/sidebar'
-import ExpansionPanel from '../expansion-panel/expansionpanel'
+ //import ExpansionPanel from '../expansion-panel/expansionpanel'
+import Expansion from '../expansion-panel/AddNoteExpansion'
+import ViewAgendaOutlinedIcon from '@material-ui/icons/ViewAgendaOutlined';
+import { Tooltip } from '@material-ui/core';
+import DisplayNotes from '../DisplayNote/DisplayNote'
 
  class dash_board extends Component {
      
@@ -32,19 +36,20 @@ import ExpansionPanel from '../expansion-panel/expansionpanel'
     openDrawer = () =>{
         this.setState(
             {
-            isDrawerOpen:true
+                isDrawerOpen: !this.state.isDrawerOpen
         })
     }
-
+    
     render() {
+        console.log(this.state.isDrawerOpen)
         return (
-            <div style={{display:"flex", flexFlow:"row wrap"}} >
+            <div>
                 <div>
-                <AppBar color="transparent">
+                <AppBar style={{backgroundColor:"white"}}>
                     <Toolbar>
                     <IconButton
                         edge="start"
-                        color="inherit"
+                        color="default"
                         aria-label="open drawer"
                         onClick={this.openDrawer}>
                         
@@ -59,25 +64,33 @@ import ExpansionPanel from '../expansion-panel/expansionpanel'
                                 placeholder="Search" className="search-bar" color="secondary"
                             /> 
                         </div>
-                        <div className="pesron-icon">
-                            <IconButton>
-                                <PersonIcon/>
-                            </IconButton>
+                        <div className="icons">
+                            <Tooltip title="List view">
+                                <IconButton>
+                                    <ViewAgendaOutlinedIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Profile">
+                                <IconButton>
+                                    <PersonIcon/>
+                                </IconButton>
+                            </Tooltip>
                         </div>
-
                     </Toolbar>
                 </AppBar>
                 </div>
                 <div>
-                    <Sidenav isOpen={this.state.isDrawerOpen}/>
+                    <Sidenav isOpen={this.state.isDrawerOpen} closeDrawer={this.Drawer}/>
                 </div>
                 <div>
-                    <ExpansionPanel/>
+                    <Expansion />
                 </div>
-
+                <div>
+                    <DisplayNotes/>
+                </div>
             </div>
         )
-    }
+    } 
 }
 
 export default dash_board
