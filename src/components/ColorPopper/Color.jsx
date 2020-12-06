@@ -38,24 +38,18 @@ class Color extends Component {
     }
 
     handleCloseForColor = () => {
-        this.setState({
-            isOpen: !this.props.isOpenPopper
-        })
+            this.props.toCloseColorPopOver()
     }
 
     setColorCode = (colorValue) => {
         this.setState({
             setColorValue: colorValue,
         })
+        this.props.toCloseColorPopOver()
         this.props.forExpansionColor(colorValue);
         console.log('from setColorCode', this.state.setColorValue)
     }
-    handleClose = () => {
-        this.setState({
-            anchor: null,
-            open: false
-        })
-    };
+   
 
     handleSetColorForNotes = () => {
         let localStorageData = JSON.parse(localStorage.getItem('userdata'));
@@ -105,7 +99,7 @@ class Color extends Component {
             <Popover
                 open={this.props.isOpenPopper}
                 anchorEl={this.props.anchorForColorPop}
-                onClose={this.handleClose}
+                onClose={this.handleCloseForColor}
 
                 anchorOrigin={{
                     vertical: 'bottom',
