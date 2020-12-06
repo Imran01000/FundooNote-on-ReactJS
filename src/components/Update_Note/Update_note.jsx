@@ -14,13 +14,6 @@ import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import './update_note.scss'
 import { updateNotes } from '../../services/note-service'
 
-const styles = ({
-    root: {
-
-    }
-
-});
-
 const theme = createMuiTheme({
     overrides: {
         MuiDialogTitle: {
@@ -38,7 +31,8 @@ class Update_note extends Component {
         this.state = {
             open: this.props.toOpenDailog,
             title: '',
-            description: ''
+            description: '',
+            colorOnPop: ''
         }
     }
 
@@ -75,25 +69,29 @@ class Update_note extends Component {
                 }
             )
         }
+        this.props.autoRefreshForUpdate()
     }
-
+    tocloseDailog = () => {
+        this.props.parentMethod();
+    }
     render() {
         const { classes } = this.props;
 
         var dailog =
             <ThemeProvider theme={theme}>
-                <Dialog open={this.props.toOpenDailog} className={classes.root}>
-                    <DialogTitle>
+                <Dialog open={this.props.toOpenDailog} onClose={this.tocloseDailog}
+                /*style={{backgroundColor:'greenyellow'}}*/>
+                    <DialogTitle style={{ backgroundColor: `${this.props.colorToPop}` }}>
                         <input className="inputs" placeholder={this.props.updateTitle}
                             onBlur={this.handleTitleInput} />
                     </DialogTitle>
-                    <DialogContent>
+                    <DialogContent style={{ backgroundColor: `${this.props.colorToPop}` }}>
                         <Typography>
                             <input className="inputs" placeholder={this.props.updateDescription}
                                 onBlur={this.handleDescriptionInput} />
                         </Typography>
                     </DialogContent>
-                    <DialogActions>
+                    <DialogActions style={{ backgroundColor: `${this.props.colorToPop}` }}>
                         <Grid container
                             direction="row"
                             justify="space-around"
@@ -142,4 +140,4 @@ class Update_note extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Update_note)
+export default withStyles({ withTheme: true })(Update_note)
