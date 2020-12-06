@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
     Card, CardContent, Typography,
     CardActions, Grid, IconButton, Menu,
-    MenuItem
+    MenuItem, Snackbar, Button
 } from '@material-ui/core'
 import AddAlertOutlinedIcon from '@material-ui/icons/AddAlertOutlined';
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
@@ -20,6 +20,8 @@ import { addColorNotes } from '../../services/note-service'
 import { trashNotes } from '../../services/note-service'
 import { archiveNotes } from '../../services/note-service'
 import { PinUnpinNotes } from '../../services/note-service'
+import CloseIcon from '@material-ui/icons/Close';
+
 const styles = {
     root: {
         flexDirection: "row",
@@ -55,6 +57,11 @@ export class Notes extends Component {
             forPopAnchor: null,
             colorforDialogPop: '',
             pinValue: true,
+            isOpenColorPop: false,
+            anchorForColor: null,
+            noteColor:'',
+            isOpenToSnackBar: false,
+            snackBarMessage:''
 
         }
     }
@@ -92,7 +99,7 @@ export class Notes extends Component {
             anchor: e.currentTarget
         })
     };
-    handleClose = () => {f
+    handleClose = () => {
         this.setState({
             anchor: null
         })
@@ -118,12 +125,35 @@ export class Notes extends Component {
             anchorForColor: e.currentTarget
         })
     }
-    autoRefreshToAddNotes = () => {
-        this.props.autoRefreshForNotes();
+
+    handleCloseForColor = () => {
+        this.setState({
+            isOpenColorPop: false
+        })
     }
+    handleColorForNote = (colorValue) => {
+        this.setState({
+            noteColor: colorValue
+        })
+        let colorNoteData ={
+            color: colorValue,
+            noteIdList:[this.state.noteId]
+        }
+        console.log(colorNoteData)
+        addColorNotes(colorNoteData, this.state.token).then(
+            result =>{
+                console.log('note color changes')
+            }
+        )
+        this.autoRefreshMethod()
+        return this.state.noteColor
+    }
+   
     toTrashTheNote = () => {
         this.setState({
-            anchor: null
+            anchor: null,
+            isOpenToSnackBar: true,
+            snackBarMessage:'Note has been trashed'
         })
         let trashNotedata = {
             isDeleted: true,
@@ -138,6 +168,10 @@ export class Notes extends Component {
     }
 
     handleArchiveClick = () => {
+        this.setState({
+            isOpenToSnackBar: true,
+            snackBarMessage:'Note has been archived'
+        })
         let archiveData = {
             isArchived: true,
             noteIdList: [this.state.noteId]
@@ -150,7 +184,7 @@ export class Notes extends Component {
         )
         this.props.autoRefreshForNotes();
     }
-    handlePinUnpinClick = () => {
+    handlePinClick = () => {
         let pinUnpinData = {
             isPined: true,
             noteIdList: [this.state.noteId]
@@ -163,9 +197,32 @@ export class Notes extends Component {
         )
         this.props.autoRefreshForNotes();
     }
+    handleUnpinClick = () => {
+        let pinUnpinData = {
+            isPined: false,
+            noteIdList: [this.state.noteId]
+        }
+        console.log(pinUnpinData);
+        PinUnpinNotes(pinUnpinData, this.state.token).then(
+            result => {
+                console.log('Note got pin')
+            }
+        )
+        this.props.autoRefreshForNotes();
+    }
+    handleToCloseSnackBar = (event, reason)=>{
+        if (reason === 'clickaway') {
+            return;
+          }
+        this.setState({
+            isOpenToSnackBar: false
+        })
+    }
     render() {
         var showMessage = false
         const { classes } = this.props;
+        console.log('for snackbar', this.state.isOpenToSnackBar)
+        console.log(this.state.snackBarMessage)
         var menu = <div>
             <Menu
                 id="menu"
@@ -194,16 +251,16 @@ export class Notes extends Component {
                                     justify="space-between"
                                     alignItems="flex-start">
                                     <h3 onClick={this.handleClickOpenForDailog}>{notes.title}</h3>
-                                    {this.state.pinValue ?
+                                    { true/*this.state.pinValue*/ ?
                                         (<Tooltip title="Pin note">
                                             <IconButton size="small">
-                                                <img src={pinBeforeClick} onClick={this.handlePinUnpinClick} />
+                                                <img src={pinBeforeClick} onClick={this.handlePinClick} />
                                             </IconButton>
                                         </Tooltip>)
                                         :
                                         (<Tooltip title="Pin note">
                                             <IconButton size="small">
-                                                <img src={pinAfterClick} onClick={this.handlePinUnpinClick} />
+                                                <img src={pinAfterClick} />
                                             </IconButton>
                                         </Tooltip>)
                                     }
@@ -260,7 +317,7 @@ export class Notes extends Component {
 
         });
         var displayNotesPin = this.props.allNotes.map((notes) => {
-            if (notes.isPined == true) {
+            if (notes.isPined == true && notes.isDeleted == false)  {
                 showMessage = true
                 return (
                     <div>
@@ -273,15 +330,15 @@ export class Notes extends Component {
                                     justify="space-between"
                                     alignItems="flex-start">
                                     <h3 onClick={this.handleClickOpenForDailog}>{notes.title}</h3>
-                                    {this.state.pinValue ?
+                                    { false/*this.state.pinValue*/ ?
                                         (<Tooltip title="Pin note">
                                             <IconButton size="small">
                                                 <img src={pinBeforeClick} />
                                             </IconButton>
                                         </Tooltip>)
                                         :
-                                        (<Tooltip title="Pin note">
-                                            <IconButton size="small">
+                                        (<Tooltip title="Unpin note">
+                                            <IconButton size="small" onClick={this.handleUnpinClick}>
                                                 <img src={pinAfterClick} />
                                             </IconButton>
                                         </Tooltip>)
@@ -354,9 +411,28 @@ export class Notes extends Component {
                     updateTitle={this.state.noteTitle} updateDescription={this.state.noteDescription}
                     noteId={this.state.noteId} colorToPop={this.state.colorforDialogPop}
                     autoRefreshForUpdate={this.autoRefreshMethod} />
-
-
-
+                <Color isOpenPopper={this.state.isOpenColorPop} anchorForColorPop={this.state.anchorForColor}
+                        toMakeColor={this.handleColorForNote} toCloseColorPopOver={this.handleCloseForColor}/>
+                <Snackbar
+                            anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                            }}
+                            open={this.state.isOpenToSnackBar}
+                            autoHideDuration={2000}
+                            onClose={this.handleToCloseSnackBar}
+                            message={this.state.snackBarMessage}
+                            action={
+                            <React.Fragment>
+                                <Button color="secondary" size="small" onClick={this.handleToCloseSnackBar}>
+                                UNDO
+                                </Button>
+                                <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleToCloseSnackBar}>
+                                <CloseIcon fontSize="small" />
+                                </IconButton>
+                            </React.Fragment>
+                            }
+                        />
             </div>
         )
     }
