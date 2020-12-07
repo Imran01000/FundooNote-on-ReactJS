@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import {
     Card, CardContent, Typography,
     CardActions, Grid, IconButton, Menu,
-    MenuItem, Snackbar, Button
+    MenuItem, Snackbar, Button, Popover,
+    List, ListItem, Chip
 } from '@material-ui/core'
 import AddAlertOutlinedIcon from '@material-ui/icons/AddAlertOutlined';
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined';
@@ -21,7 +22,9 @@ import { trashNotes } from '../../services/note-service'
 import { archiveNotes } from '../../services/note-service'
 import { PinUnpinNotes } from '../../services/note-service'
 import CloseIcon from '@material-ui/icons/Close';
-
+import ScheduleOutlinedIcon from '@material-ui/icons/ScheduleOutlined';
+import { addReminderToNote } from '../../services/note-service'
+import { removeReminderNote } from '../../services/note-service'
 const styles = {
     root: {
         flexDirection: "row",
@@ -29,15 +32,15 @@ const styles = {
         flexFlow: "row wrap"
     },
     card: {
-        width: "240px",
+        width: "320px",
         marginTop: "20px",
-        height: "170px",
+        height: "90%",
         marginLeft: "20px"
     },
     cardListView: {
         width: "600px",
         marginTop: "50px",
-        height: "170px",
+        height: "95%",
         marginLeft: "130px"
     },
 };
@@ -59,9 +62,16 @@ export class Notes extends Component {
             pinValue: true,
             isOpenColorPop: false,
             anchorForColor: null,
-            noteColor:'',
+            noteColor: '',
             isOpenToSnackBar: false,
-            snackBarMessage:''
+            snackBarMessage: '',
+            anchorForReminder: null,
+            isOpenForReminder: false,
+            noteReminder: [],
+            laterToday: 'Later today  8:00 pm',
+            tomorrow: 'Tomorrow   8:00 am',
+            nextWeek: 'Next week  Mon,8:00 am',
+            toShowChip: false,
 
         }
     }
@@ -69,7 +79,7 @@ export class Notes extends Component {
         this.props.autoRefreshForNotes();
     }
 
-    handleClickData = (titleValue, descriptionValue, notesId, colorToDailogPop, isPined) => {
+    handleClickData = (titleValue, descriptionValue, notesId, colorToDailogPop, isPined, reminderNote) => {
 
         let noteColorData = {
             color: this.props.colorCodeForNote,
@@ -85,7 +95,8 @@ export class Notes extends Component {
             noteId: notesId,
             colorforDialogPop: colorToDailogPop,
             token: userToken,
-            pinValue: isPined
+            pinValue: isPined,
+            noteReminder: reminderNote
         })
         addColorNotes(noteColorData, userToken).then(
 
@@ -135,25 +146,25 @@ export class Notes extends Component {
         this.setState({
             noteColor: colorValue
         })
-        let colorNoteData ={
+        let colorNoteData = {
             color: colorValue,
-            noteIdList:[this.state.noteId]
+            noteIdList: [this.state.noteId]
         }
         console.log(colorNoteData)
         addColorNotes(colorNoteData, this.state.token).then(
-            result =>{
+            result => {
                 console.log('note color changes')
             }
         )
         this.autoRefreshMethod()
         return this.state.noteColor
     }
-   
+
     toTrashTheNote = () => {
         this.setState({
             anchor: null,
             isOpenToSnackBar: true,
-            snackBarMessage:'Note has been trashed'
+            snackBarMessage: 'Note has been trashed'
         })
         let trashNotedata = {
             isDeleted: true,
@@ -170,7 +181,7 @@ export class Notes extends Component {
     handleArchiveClick = () => {
         this.setState({
             isOpenToSnackBar: true,
-            snackBarMessage:'Note has been archived'
+            snackBarMessage: 'Note has been archived'
         })
         let archiveData = {
             isArchived: true,
@@ -210,17 +221,129 @@ export class Notes extends Component {
         )
         this.props.autoRefreshForNotes();
     }
-    handleToCloseSnackBar = (event, reason)=>{
+    handleToCloseSnackBar = (event, reason) => {
         if (reason === 'clickaway') {
             return;
-          }
+        }
         this.setState({
             isOpenToSnackBar: false
         })
     }
+
+    handleClickForReminder = (event) => {
+        this.setState({
+            anchorForReminder: event.currentTarget,
+            isOpenForReminder: true
+        })
+
+    }
+    handleCloseForReminder = () => {
+        this.setState({
+            anchorForReminder: null,
+            isOpenForReminder: false
+        })
+    }
+    handleDataForReminderToday = (dateTime) => {
+        this.setState({
+            noteReminder: dateTime,
+            toShowChip: true
+        })
+        let data = {
+            reminder: ["2020-12-08"],
+            noteIdList: [this.state.noteId]
+        }
+        addReminderToNote(data, this.state.token).then(
+            result => {
+                console.log("reminder added")
+            }
+        ).catch(
+            console.log('something went wrong!!')
+        )
+        this.autoRefreshMethod()
+    }
+    handleDataForReminderTom = (dateTime) => {
+        this.setState({
+            noteReminder: dateTime,
+            toShowChip: true
+        })
+        let data = {
+            reminder: ["2020-12-09"],
+            noteIdList: [this.state.noteId]
+        }
+        addReminderToNote(data, this.state.token).then(
+            result => {
+                console.log("reminder added")
+            }
+        ).catch(
+            console.log('something went wrong!!')
+        )
+        this.autoRefreshMethod()
+    }
+    handleDataForReminderNextWeek = (dateTime) => {
+        this.setState({
+            noteReminder: dateTime,
+            toShowChip: true
+        })
+        let data = {
+            reminder: ["2020-12-15"],
+            noteIdList: [this.state.noteId]
+        }
+        addReminderToNote(data, this.state.token).then(
+            result => {
+                console.log("reminder added")
+            }
+        ).catch(
+            console.log('something went wrong!!')
+        )
+        this.autoRefreshMethod()
+    }
+
+    handleRemoveReminder = () => {
+
+        let data = {
+            reminder: [""],
+            noteIdList: [this.state.noteId]
+        }
+        removeReminderNote(data, this.state.token).then(
+            result => {
+                console.log("reminder removed")
+            }
+        ).catch(
+            console.log('something went wrong!!')
+        )
+        this.autoRefreshMethod()
+    }
+
     render() {
         var showMessage = false
         const { classes } = this.props;
+        var reminderForNotes = <div>
+            <Popover
+                open={this.state.isOpenForReminder}
+                anchorEl={this.state.anchorForReminder}
+                onClose={this.handleCloseForReminder}
+
+            >
+                <Typography style={{ marginLeft: '10px' }}>
+                    Reminder:
+                                        </Typography>
+                <List>
+                    <ListItem button
+                        onClick={() => this.handleDataForReminderToday(this.state.laterToday)}>
+                        {this.state.laterToday}
+                    </ListItem>
+                    <ListItem button
+                        onClick={() => this.handleDataForReminderTom(this.state.tomorrow)}>
+                        {this.state.tomorrow}
+                    </ListItem>
+                    <ListItem button
+                        onClick={() => this.handleDataForReminderNextWeek(this.state.nextWeek)}>
+                        {this.state.nextWeek}
+                    </ListItem>
+                </List>
+            </Popover>
+        </div>
+
         console.log('for snackbar', this.state.isOpenToSnackBar)
         console.log(this.state.snackBarMessage)
         var menu = <div>
@@ -235,15 +358,15 @@ export class Notes extends Component {
                 <MenuItem onClick={this.handleClose}>Add labels</MenuItem>
             </Menu>
         </div>
-
+        console.log("to check data", this.props.allNotes)
         var displayNotes = this.props.allNotes.map((notes) => {
-            console.log("notes data", notes.isPined)
+
             if (notes.isDeleted == false && notes.isArchived == false && notes.isPined == false) {
                 return (
                     <div>
                         <Card className={this.props.listGridViewValue ? classes.card : classes.cardListView}
                             onClick={() => this.handleClickData(notes.title, notes.description, notes.id, notes.color,
-                                notes.isPined)}
+                                notes.isPined, notes.reminder)}
                             style={{ backgroundColor: `${notes.color}` }}>
                             <CardContent>
                                 <Grid container
@@ -251,7 +374,7 @@ export class Notes extends Component {
                                     justify="space-between"
                                     alignItems="flex-start">
                                     <h3 onClick={this.handleClickOpenForDailog}>{notes.title}</h3>
-                                    { true/*this.state.pinValue*/ ?
+                                    {true ?
                                         (<Tooltip title="Pin note">
                                             <IconButton size="small">
                                                 <img src={pinBeforeClick} onClick={this.handlePinClick} />
@@ -269,6 +392,16 @@ export class Notes extends Component {
                                     {notes.description}
                                 </Typography>
                             </CardContent>
+                            {notes.reminder.length == 1 ? <div>
+                                <Chip
+                                    size="small"
+                                    label={notes.reminder}
+                                    icon={<ScheduleOutlinedIcon />}
+                                    onDelete={this.handleRemoveReminder}
+                                    style={{ marginLeft: '6.5px' }}
+                                />
+                            </div>
+                                : <div></div>}
                             <CardActions>
                                 <Grid container
                                     direction="row"
@@ -276,7 +409,8 @@ export class Notes extends Component {
                                     alignItems="flex-start">
                                     <Tooltip title="Remind me">
                                         <IconButton size="small">
-                                            <AddAlertOutlinedIcon fontSize="small" />
+                                            <AddAlertOutlinedIcon fontSize="small"
+                                                onClick={this.handleClickForReminder} />
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip title="Collaborator">
@@ -317,12 +451,13 @@ export class Notes extends Component {
 
         });
         var displayNotesPin = this.props.allNotes.map((notes) => {
-            if (notes.isPined == true && notes.isDeleted == false)  {
+            if (notes.isPined == true && notes.isDeleted == false) {
                 showMessage = true
                 return (
                     <div>
                         <Card className={this.props.listGridViewValue ? classes.card : classes.cardListView}
-                            onClick={() => this.handleClickData(notes.title, notes.description, notes.id, notes.color)}
+                            onClick={() => this.handleClickData(notes.title, notes.description, notes.id, notes.color,
+                            )}
                             style={{ backgroundColor: `${notes.color}` }}>
                             <CardContent>
                                 <Grid container
@@ -330,7 +465,7 @@ export class Notes extends Component {
                                     justify="space-between"
                                     alignItems="flex-start">
                                     <h3 onClick={this.handleClickOpenForDailog}>{notes.title}</h3>
-                                    { false/*this.state.pinValue*/ ?
+                                    {false/*this.state.pinValue*/ ?
                                         (<Tooltip title="Pin note">
                                             <IconButton size="small">
                                                 <img src={pinBeforeClick} />
@@ -399,12 +534,17 @@ export class Notes extends Component {
 
             <div className={classes.root}>
                 {showMessage ? <h4 style={{ marginLeft: '20px' }}>Pinned Notes</h4> : ''}
-                <Grid container direction="row">
+                <Grid container direction="row" >
 
                     {displayNotesPin}
                     {menu}
+                    {reminderForNotes}
                 </Grid>
-                <Grid container direction="row">
+                {showMessage ? <h4 style={{
+                    marginLeft: '20px',
+                    marginTop: '40px'
+                }}>Others note</h4> : ''}
+                <Grid container direction="row" >
                     {displayNotes}
                 </Grid>
                 <Update_note toOpenDailog={this.state.isOpen} parentMethod={this.toCloseDailog}
@@ -412,27 +552,27 @@ export class Notes extends Component {
                     noteId={this.state.noteId} colorToPop={this.state.colorforDialogPop}
                     autoRefreshForUpdate={this.autoRefreshMethod} />
                 <Color isOpenPopper={this.state.isOpenColorPop} anchorForColorPop={this.state.anchorForColor}
-                        toMakeColor={this.handleColorForNote} toCloseColorPopOver={this.handleCloseForColor}/>
+                    toMakeColor={this.handleColorForNote} toCloseColorPopOver={this.handleCloseForColor} />
                 <Snackbar
-                            anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                            }}
-                            open={this.state.isOpenToSnackBar}
-                            autoHideDuration={2000}
-                            onClose={this.handleToCloseSnackBar}
-                            message={this.state.snackBarMessage}
-                            action={
-                            <React.Fragment>
-                                <Button color="secondary" size="small" onClick={this.handleToCloseSnackBar}>
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    open={this.state.isOpenToSnackBar}
+                    autoHideDuration={2000}
+                    onClose={this.handleToCloseSnackBar}
+                    message={this.state.snackBarMessage}
+                    action={
+                        <React.Fragment>
+                            <Button color="secondary" size="small" onClick={this.handleToCloseSnackBar}>
                                 UNDO
                                 </Button>
-                                <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleToCloseSnackBar}>
+                            <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleToCloseSnackBar}>
                                 <CloseIcon fontSize="small" />
-                                </IconButton>
-                            </React.Fragment>
-                            }
-                        />
+                            </IconButton>
+                        </React.Fragment>
+                    }
+                />
             </div>
         )
     }
