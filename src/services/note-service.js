@@ -35,7 +35,17 @@ export const PinUnpinNotes = (data, token)=>{
   return axios.post(`${URL}`, data)
 };
 
+export const addReminderToNote = (data, token)=>{
+  const URL = `http://fundoonotes.incubation.bridgelabz.com/api/notes/addUpdateReminderNotes?access_token=${token}`;
+  return axios.post(`${URL}`, data)
+}
+
 export const deleteNoteForever = (data, token)=>{
   const URL = `http://fundoonotes.incubation.bridgelabz.com/api/notes/deleteForeverNotes?access_token=${token}`;
   return axios.post(`${URL}`, data);
 };
+
+export const removeReminderNote = (data, token) =>{
+  const URL = `http://fundoonotes.incubation.bridgelabz.com/api/notes/removeReminderNotes?access_token=${token}`;
+  return axios.post(`${URL}`, data);
+}
