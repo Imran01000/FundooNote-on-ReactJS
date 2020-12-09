@@ -32,7 +32,7 @@ const styles = {
         flexFlow: "row wrap"
     },
     card: {
-        width: "320px",
+        width: "280px",
         marginTop: "20px",
         height: "90%",
         marginLeft: "20px"
@@ -326,7 +326,7 @@ export class Notes extends Component {
             >
                 <Typography style={{ marginLeft: '10px' }}>
                     Reminder:
-                                        </Typography>
+                </Typography>
                 <List>
                     <ListItem button
                         onClick={() => this.handleDataForReminderToday(this.state.laterToday)}>
@@ -362,6 +362,9 @@ export class Notes extends Component {
         var displayNotes = this.props.allNotes.map((notes) => {
 
             if (notes.isDeleted == false && notes.isArchived == false && notes.isPined == false) {
+                var str = notes.reminder.toString().substring(0, 16)
+                console.log('string', str)
+
                 return (
                     <div>
                         <Card className={this.props.listGridViewValue ? classes.card : classes.cardListView}
@@ -395,7 +398,7 @@ export class Notes extends Component {
                             {notes.reminder.length == 1 ? <div>
                                 <Chip
                                     size="small"
-                                    label={notes.reminder}
+                                    label={str}
                                     icon={<ScheduleOutlinedIcon />}
                                     onDelete={this.handleRemoveReminder}
                                     style={{ marginLeft: '6.5px' }}
