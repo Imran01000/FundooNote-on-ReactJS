@@ -11,11 +11,11 @@ export const getAllLabelList = (token) =>{
 };
 
 export const removeLabel = (id, token) =>{
-    const URL = `http://fundoonotes.incubation.bridgelabz.com/api/noteLabels/5fcfaaa6d5d3de001e5d83b0/deleteNoteLabel?access_token=${token}`;
-    return axios.delete(`${URL}`, id)
+    const URL = `http://fundoonotes.incubation.bridgelabz.com/api/noteLabels/${id}/deleteNoteLabel?access_token=${token}`;
+    return axios.delete(`${URL}`)
 };
 
-export const updateLabel = (data, token) =>{
-    const URL = `http://fundoonotes.incubation.bridgelabz.com/api/noteLabels/5fcfaaa6d5d3de001e5d83b0/updateNoteLabel?access_token=${token}`;
-    return axios.delete(`${URL}`, data)
+export const updateLabel = (data, token, LabelId) =>{
+    const URL = `http://fundoonotes.incubation.bridgelabz.com/api/noteLabels/${LabelId}/updateNoteLabel?access_token=${token}`;
+    return axios.post(`${URL}`, data)
 };

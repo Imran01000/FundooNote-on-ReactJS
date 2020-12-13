@@ -46,7 +46,7 @@ class Color extends Component {
             setColorValue: colorValue,
         })
         this.props.toCloseColorPopOver()
-        this.props.forExpansionColor(colorValue);
+        this.props.toMakeColor(colorValue);
         console.log('from setColorCode', this.state.setColorValue)
     }
    
@@ -70,7 +70,6 @@ class Color extends Component {
         console.log('color code', this.state.setColorValue)
         var colorArray1 = this.state.colorCode1.map((value) => {
             return (
-
                 <IconButton style={{ backgroundColor: `${value}` }} className="button"
                     onClick={() => this.setColorCode(value)} >
                 </IconButton>

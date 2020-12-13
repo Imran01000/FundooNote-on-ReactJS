@@ -79,7 +79,8 @@ export class AddNoteExpansion extends Component {
             anchorForColor: null,
             backgroundColorForExpansion: '',
             colorForNote:'',
-            test:'hello'
+            test:'hello',
+            userId:''
 
 
         }
@@ -94,7 +95,9 @@ export class AddNoteExpansion extends Component {
                 var arr = result.data.data.data
                 this.setState({
                     allNotes: result.data.data.data
+                    
                 })
+                this.props.takeUserId(this.state.allNotes[0].userId)
             }
         )
     }
@@ -139,6 +142,7 @@ export class AddNoteExpansion extends Component {
                     if (result.status === 200) {
                         console.log("Note added successfully");
                     }
+
                     let noteColorData = {
                         color: this.state.backgroundColorForExpansion,
                         noteIdList: [result.data.status.details.id] 
@@ -184,7 +188,10 @@ export class AddNoteExpansion extends Component {
         })
         return this.state.backgroundColorForExpansion
     }
+    
+    
     render() {
+
         const { classes } = this.props;
         let displayIcons;
         console.log('notes details', this.state.allNotes)
@@ -284,12 +291,7 @@ export class AddNoteExpansion extends Component {
 
 
                     <Color isOpenPopper={this.state.isOpenColorPop} anchorForColorPop={this.state.anchorForColor}
-                        forExpansionColor={this.handleColorForExpansion} toCloseColorPopOver={this.handleCloseForColor}/>
-
-                    
-                    <Trash autoRefresh={this.componentWillMount} allNotes={this.state.allNotes} testing={this.state.test}/>
-
-                    <ArchiveNotes allNotes={this.state.allNotes} testing={this.state.test}/>
+                        toMakeColor={this.handleColorForExpansion} toCloseColorPopOver={this.handleCloseForColor}/>
                 </div>
                 {menu}
             </ThemeProvider>

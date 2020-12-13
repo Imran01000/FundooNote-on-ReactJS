@@ -19,6 +19,7 @@ import { addLabel } from '../../services/label-service'
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { removeLabel } from '../../services/label-service'
+import { updateLabel } from '../../services/label-service'
 
 class LabelDailog extends Component {
     constructor(props) {
@@ -28,7 +29,9 @@ class LabelDailog extends Component {
             labelData: '',
             allLabelNotes: [],
             userId: '',
-            token: ''
+            token: '',
+            isDisabled: true,
+            labelID:''
         }
     }
     componentWillMount = () => {
@@ -47,19 +50,10 @@ class LabelDailog extends Component {
 
     handleToLabelDailog = () => {
         this.props.toClose()
-        let data = {
-            label: this.state.labelData,
-            isDeleted: false,
-            userId: this.props.id
-        }
-        addLabel(data, this.state.token).then(
-            result => {
-                console.log('Label added')
-            }
-        ).catch(
-            console.log("something went wrong!!")
-        )
-        this.componentWillMount()
+        this.setState({
+            isDisabled: true,
+        })
+
     }
 
     handledataForLabel = (event) => {
@@ -74,9 +68,11 @@ class LabelDailog extends Component {
             isDeleted: false,
             userId: this.props.id
         }
+        console.log(data)
         addLabel(data, this.state.token).then(
             result => {
                 console.log('Label added')
+                console.log(result)
             }
         ).catch(
             console.log("something went wrong!!")
@@ -84,13 +80,43 @@ class LabelDailog extends Component {
         this.componentWillMount()
     }
     handleIdTodelete = (id) => {
-        let userId = {
-            id: id
-        }
-        removeLabel(userId, this.state.token).then(
+        removeLabel(id, this.state.token).then(
             result => {
                 console.log(result);
             }
+        )
+        this.componentWillMount()
+    }
+
+    handleDisabled = () => {
+        this.setState({
+            isDisabled: false,
+        })
+        console.log(this.state.isDisabled)
+    }
+    catchLabelId = (labelId) =>{
+        this.setState({
+            labelID: labelId
+        })
+    }
+    updateLabel = () => {
+        this.setState({
+            isDisabled: false,
+        })
+        
+        let data = {
+            label: this.state.labelData,
+            isDeleted: true,
+            id:this.state.labelID,
+            userId: this.props.id
+        }
+        console.log(data)
+        updateLabel(data, this.state.token, data.id).then(
+            result =>{
+                this.handleDisabled()
+                console.log("Label updated!!!")
+            }
+            
         )
         this.componentWillMount()
     }
@@ -103,11 +129,11 @@ class LabelDailog extends Component {
                         <DeleteOutlinedIcon onClick={() => this.handleIdTodelete(labels.id)} />
                     </IconButton>
                 </Tooltip>
-                <Input placeholder={labels.label}
-                    onBlur={this.handledataForLabel} />
+                <Input defaultValue={labels.label} disabled={this.state.isDisabled}
+                    onBlur={this.handledataForLabel} onClick={() => this.catchLabelId(labels.id)}/>
                 <Tooltip>
                     <IconButton>
-                        <EditOutlinedIcon />
+                        <EditOutlinedIcon onClick={this.handleDisabled} />
                     </IconButton>
                 </Tooltip>
             </div>
@@ -143,7 +169,7 @@ class LabelDailog extends Component {
                     <Divider />
                     <DialogActions>
                         <Grid>
-                            <Button onClick={this.handleToLabelDailog}>
+                            <Button onClick={this.updateLabel}>
                                 Done
                             </Button>
                         </Grid>

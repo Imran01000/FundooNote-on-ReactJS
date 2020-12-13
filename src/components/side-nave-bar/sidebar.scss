@@ -1,12 +1,10 @@
-.list{
-    width:220px;
+.list-item:hover {
+    background-color: bisque !important;
 }
-.buttons{
-    width:220px;
-}
-@media (max-width:400px){
-    .list{
-        width:150px;
+
+@media (max-width:400px) {
+    .list {
+        width: 150px;
     }
-    
+
 }

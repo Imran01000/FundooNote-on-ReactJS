@@ -82,12 +82,12 @@ class Update_note extends Component {
                 <Dialog open={this.props.toOpenDailog} onClose={this.tocloseDailog}
                 /*style={{backgroundColor:'greenyellow'}}*/>
                     <DialogTitle style={{ backgroundColor: `${this.props.colorToPop}` }}>
-                        <input className="inputs" placeholder={this.props.updateTitle}
+                        <input className="inputs" defaultValue={this.props.updateTitle}
                             onBlur={this.handleTitleInput} />
                     </DialogTitle>
                     <DialogContent style={{ backgroundColor: `${this.props.colorToPop}` }}>
                         <Typography>
-                            <input className="inputs" placeholder={this.props.updateDescription}
+                            <input className="inputs" defaultValue={this.props.updateDescription}
                                 onBlur={this.handleDescriptionInput} />
                         </Typography>
                     </DialogContent>

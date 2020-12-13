@@ -1,89 +1,102 @@
-.main-reg{
+.main-reg {
     text-align: center;
     margin-top: 100px;
 }
 
-.fundoo-reg{
+.fundoo-reg {
     color: bisque;
 }
-.text-reg{
+
+.text-reg {
     text-align: center;
     margin-top: 10px;
 }
 
-.text-field-reg{
+.text-field-reg {
     margin-top: 40px;
 }
 
-#email-field-reg{
+#email-field-reg {
     margin-top: 20px;
-    
+
 }
-.email{
+
+.email {
     width: 440px;
 }
 
-.last-name{
+.last-name {
     margin-left: 20px !important;
 }
 
-.mobile-no{
+.mobile-no {
     width: 440px;
 }
-.confirm{
+
+.confirm {
     margin-left: 20px !important;
 }
-#password-field-reg{
+
+#password-field-reg {
     margin-top: 20px;
 }
 
-#mobileNo-field-reg{
-    margin-top: 20px;
-}
-.buttons-reg{
+#mobileNo-field-reg {
     margin-top: 20px;
 }
 
-.buttons-reg Button{
+.buttons-reg {
+    margin-top: 20px;
+}
+
+.buttons-reg Button {
     margin-left: 90px;
     background-color: bisque;
 
 }
 
 
-#link{
+#link {
     margin-left: 35px;
 }
-@media (max-width:470px){
-    .last-name{
+
+@media (max-width:470px) {
+    .last-name {
         margin-left: 8px !important;
         width: 100px;
     }
-    .email{
+
+    .email {
         width: 208px;
-    
+
     }
-    .mobile-no{
+
+    .mobile-no {
         width: 208px;
     }
-    .confirm{
+
+    .confirm {
         margin-left: 8px !important;
         width: 100px;
     }
-    .first-name{
+
+    .first-name {
         width: 100px;
     }
-    .pwd{
-       width: 100px; 
+
+    .pwd {
+        width: 100px;
     }
-    #link{
+
+    #link {
         text-size-adjust: 10px;
     }
-    .buttons-reg Button{
+
+    .buttons-reg Button {
         margin-left: 15px;
     }
 
-    .fundoo-reg{
+    .fundoo-reg {
         font-size: larger;
     }
 }

@@ -1,31 +1,28 @@
-.search-bar{
+.search-bar {
     margin-left: 60px;
-    background-color:  #f2f2f2;
+    background-color: #f2f2f2;
     width: 250%;
     height: 40px;
     border-radius: 10px;
     padding-left: 20%;
 }
-.pesron-icon{
+
+.icons {
     margin-left: 50%;
 }
 
-.Sidenav-Bar{
-    width: 250px;
-}
-
-
-@media(max-width:400px){
-    .search-bar{
-        width: 100px;
+@media(max-width:800px) {
+    .search-bar {
+        width: 170%;
     }
-    .pesron-icon{
-        margin-left: 5px;
+
+    .icons {
+        margin-left: 40%;
     }
 }
 
-@media(max-width:900px){
-    .fundoo-text span{
+@media(max-width:900px) {
+    .fundoo-text span {
         font-size: xx-small;
     }
 }

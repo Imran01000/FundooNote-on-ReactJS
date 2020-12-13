@@ -72,6 +72,8 @@ export class Notes extends Component {
             tomorrow: 'Tomorrow   8:00 am',
             nextWeek: 'Next week  Mon,8:00 am',
             toShowChip: false,
+            toOpenLabelList: false,
+            anchorForLabelList: null,
 
         }
     }
@@ -249,7 +251,7 @@ export class Notes extends Component {
             toShowChip: true
         })
         let data = {
-            reminder: ["2020-12-08"],
+            reminder: ["2020-12-09"],
             noteIdList: [this.state.noteId]
         }
         addReminderToNote(data, this.state.token).then(
@@ -267,7 +269,7 @@ export class Notes extends Component {
             toShowChip: true
         })
         let data = {
-            reminder: ["2020-12-09"],
+            reminder: ["2020-12-10"],
             noteIdList: [this.state.noteId]
         }
         addReminderToNote(data, this.state.token).then(
@@ -285,7 +287,7 @@ export class Notes extends Component {
             toShowChip: true
         })
         let data = {
-            reminder: ["2020-12-15"],
+            reminder: ["2020-12-16"],
             noteIdList: [this.state.noteId]
         }
         addReminderToNote(data, this.state.token).then(
@@ -314,9 +316,27 @@ export class Notes extends Component {
         this.autoRefreshMethod()
     }
 
+    handleClickToDisplayLabelList = (event) => {
+        this.setState({
+            anchorForLabelList: event.currentTarget,
+            toOpenLabelList: true
+        })
+      };
     render() {
         var showMessage = false
         const { classes } = this.props;
+
+        var labelList = <div>
+            <Popover
+            open={this.state.toOpenLabelList}
+            anchorEl={this.state.anchorForLabelList}
+            // onClose={}
+            >
+                <Typography>
+                    oinsrvk
+                </Typography>
+            </Popover>
+        </div>
         var reminderForNotes = <div>
             <Popover
                 open={this.state.isOpenForReminder}
@@ -346,6 +366,8 @@ export class Notes extends Component {
 
         console.log('for snackbar', this.state.isOpenToSnackBar)
         console.log(this.state.snackBarMessage)
+         
+        
         var menu = <div>
             <Menu
                 id="menu"
@@ -355,8 +377,10 @@ export class Notes extends Component {
                 onClose={this.handleClose}
             >
                 <MenuItem onClick={this.toTrashTheNote} >Delete note</MenuItem>
-                <MenuItem onClick={this.handleClose}>Add labels</MenuItem>
+                <MenuItem onClick={this.handleClickToDisplayLabelList}>Add labels</MenuItem>
+                
             </Menu>
+            {labelList}
         </div>
         console.log("to check data", this.props.allNotes)
         var displayNotes = this.props.allNotes.map((notes) => {

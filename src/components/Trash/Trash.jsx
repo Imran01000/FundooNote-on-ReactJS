@@ -6,7 +6,11 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
-import { getAllNotes } from '../../services/note-service'
+import { getAllNotes } from '../../services/note-service';
+import {trashNotes} from '../../services/note-service';
+import {deleteNoteForever} from '../../services/note-service'
+import AppbarSidenav from '../AppbarSidenav/AppbarSidenav';
+
 const styles = {
     root: {
         flexDirection: "row",
@@ -15,8 +19,8 @@ const styles = {
 
     },
     card: {
-        width: "240px",
-        marginTop: "50px",
+        width: "320px",
+        marginTop: "100px",
         height: "170px",
         marginLeft: "20px"
     }
@@ -28,11 +32,17 @@ class TrashNotes extends Component {
         this.state = {
             anchor: null,
             isOpen: false,
+            allNotes:[],
+            noteId:'',
+            token:'',
         }
     }
     componentWillMount = () => {
         let localStorageData = JSON.parse(localStorage.getItem('userdata'));
         let userToken = localStorageData.userToken
+        this.setState({
+            token: userToken
+        })
         getAllNotes(userToken).then(
             result => {
                 console.log('from wind mount', userToken)
@@ -40,7 +50,6 @@ class TrashNotes extends Component {
                 this.setState({
                     allNotes: result.data.data.data
                 })
-                console.log('from trash', result)
             }
         )
     }
@@ -54,6 +63,37 @@ class TrashNotes extends Component {
             anchor: e.currentTarget
         })
     };
+    handleClickData = (id)=>{
+        this.setState({
+            noteId:id,
+        })
+    }
+    handleToRestoreNote = ()=>{
+        let restoreNoteData = {
+            isDeleted:false,
+            noteIdList:[this.state.noteId]
+        }
+        console.log(restoreNoteData)
+        trashNotes(restoreNoteData, this.state.token).then(
+            result =>{
+                console.log('note restored');
+            }
+        )
+        this.componentWillMount()
+    }
+    handleNoteDeleteForever = ()=>{
+        let deleteNoteData ={
+            isDeleted: true,
+            noteIdList:[this.state.noteId]
+        }
+        console.log(deleteNoteData)
+        deleteNoteForever(deleteNoteData, this.state.token).then(
+            result =>{
+                console.log('note deleted');
+            }
+        )
+        this.componentWillMount() 
+    }
     render() {
         const { classes } = this.props;
         var menu = <div>
@@ -63,22 +103,18 @@ class TrashNotes extends Component {
                 keepMounted
                 open={Boolean(this.state.anchor)}
                 onClose={this.handleClose}
-            >
-                <MenuItem onClick={this.toTrashTheNote} >Delete Forever</MenuItem>
-                <MenuItem onClick={this.handleClose}>Restore</MenuItem>
+                 >
+                <MenuItem onClick={this.handleNoteDeleteForever} >Delete Forever</MenuItem>
+                <MenuItem onClick={this.handleToRestoreNote}>Restore</MenuItem>
             </Menu>
         </div>
 
-        console.log('from trash', this.props.testing)
-        console.log(this.props.allNotes)
-        var displayTrashNotes = this.props.allNotes.map((trashNotes) => {
+    
+        var displayTrashNotes = this.state.allNotes.map((trashNotes) => {
             if (trashNotes.isDeleted == true) {
                 return (
                     <div>
-                        <Card className={classes.card}
-                            /* onClick={() => this.handleClickData(trashNotes.title, trashNotes.description,
-                              trashNotes.id, trashNotes.color,
-                                 trashNotes.isPined)}*/
+                        <Card className={classes.card} onClick={()=>this.handleClickData(trashNotes.id)}
                             style={{ backgroundColor: `${trashNotes.color}` }}>
                             <CardContent>
                                 <Grid container
@@ -127,6 +163,7 @@ class TrashNotes extends Component {
         )
         return (
             <div className={classes.root}>
+                <AppbarSidenav/>
                 <Grid container direction="row">
                     {displayTrashNotes}
                     {menu}

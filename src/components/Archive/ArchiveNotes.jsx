@@ -10,6 +10,9 @@ import PaletteOutlinedIcon from '@material-ui/icons/PaletteOutlined';
 import UnarchiveOutlinedIcon from '@material-ui/icons/UnarchiveOutlined';
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
+import {getAllNotes} from '../../services/note-service';
+import {archiveNotes} from '../../services/note-service'
+import AppbarSidenav from '../AppbarSidenav/AppbarSidenav';
 
 
 const styles = {
@@ -20,8 +23,8 @@ const styles = {
 
     },
     card: {
-        width: "240px",
-        marginTop: "50px",
+        width: "320px",
+        marginTop: "100px",
         height: "170px",
         marginLeft: "20px"
     }
@@ -31,23 +34,57 @@ class ArchiveNotes extends Component {
         super(props)
 
         this.state = {
-
+            allNotes:[],
+            noteId:'',
+            token:'',
         }
     }
 
+    componentWillMount = () => {
+        let localStorageData = JSON.parse(localStorage.getItem('userdata'));
+        let userToken = localStorageData.userToken
+        this.setState({
+            token: userToken
+        })
+        getAllNotes(userToken).then(
+            result => {
+                console.log('from wind mount', userToken)
+                var arr = result.data.data.data
+                this.setState({
+                    allNotes: result.data.data.data
+                })
+            }
+        )
+    }
 
+    handleClickdata = (id)=>{
+        this.setState({
+            noteId: id
+        })
+        
+    }
+   handleUnArchiveNote = () =>{
+       let noteData = {
+           isArchived: false,
+           noteIdList:[this.state.noteId]
+       }
+       console.log(noteData)
+       archiveNotes(noteData, this.state.token).then(
+           result =>{
+               console.log('note unarchived')
+           }
+       )
+       this.componentWillMount()
+   }
     render() {
-        console.log('from archive', this.props.testing)
         const { classes } = this.props;
-        console.log('from archive', this.props.allNotes)
-        var displayArchiveNotes = this.props.allNotes.map((archiveNotes) => {
+        console.log('from archive', this.state.allNotes)
+        var displayArchiveNotes = this.state.allNotes.map((archiveNotes) => {
             if (archiveNotes.isArchived == true) {
                 return (
                     <div>
-                        <Card className={classes.card}
-                            /* onClick={() => this.handleClickData(trashNotes.title, trashNotes.description,
-                              trashNotes.id, trashNotes.color,
-                                 trashNotes.isPined)}*/
+                        <Card className={classes.card} onClick={()=>this.handleClickdata(archiveNotes.id)}
+                           
                             style={{ backgroundColor: `${archiveNotes.color}` }}>
                             <CardContent>
                                 <Grid container
@@ -100,7 +137,7 @@ class ArchiveNotes extends Component {
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip title="Archive">
-                                        <IconButton size="small">
+                                        <IconButton size="small" onClick={this.handleUnArchiveNote}>
                                             <UnarchiveOutlinedIcon fontSize="small" />
                                         </IconButton>
                                     </Tooltip>
@@ -121,10 +158,11 @@ class ArchiveNotes extends Component {
         }
         )
         return (
-            <div >
-
-                {displayArchiveNotes}
-
+            <div className={classes.root}>
+                <AppbarSidenav />
+                 <Grid container direction="row">
+                    {displayArchiveNotes}
+                </Grid>
                 {/* <h1>{this.props.testing}</h1> */}\
 
             </div>

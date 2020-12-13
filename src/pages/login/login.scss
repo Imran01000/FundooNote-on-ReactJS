@@ -1,67 +1,69 @@
-.form-body{
-     text-align: center;
-     margin-top: 150px;
- }
-.form-login{
+.form-body {
+    text-align: center;
+    margin-top: 150px;
+}
+
+.form-login {
     width: 400px;
     height: 370px;
 }
 
-.form-head{
+.form-head {
     background-color: bisque !important;
 }
 
-.text{
-   margin-top: 10px;
+.text {
+    margin-top: 10px;
 }
 
-.text-field-login{
+.text-field-login {
     margin-top: 20px;
 }
 
-.password-field{
+.password-field {
     margin-top: 20px;
 }
 
-.buttons-login{
+.buttons-login {
     margin-top: 20px;
 }
 
-.buttons-login Button{
+.buttons-login Button {
     background-color: bisque !important;
     margin-left: 30px;
 }
 
-.fundoo-text{
+.fundoo-text {
     color: bisque;
 }
 
-.password-input{
+.password-input {
     width: 320px;
 }
 
-.email-input{
+.email-input {
     width: 320px;
 }
 
-@media (max-width:350px){
-    .password-input{
-        width: 200px;
-    }
-    
-    .email-input{
+@media (max-width:365px) {
+    .password-input {
         width: 200px;
     }
 
-    .fundoo-text{
+    .email-input {
+        width: 200px;
+    }
+
+    .fundoo-text {
         font-size: larger;
     }
 
-    .text span,b{
+    .text span,
+    b {
         font-size: medium;
     }
 
-    .buttons-login Button{
+    .buttons-login Button {
         margin-left: 15px;
     }
 }
